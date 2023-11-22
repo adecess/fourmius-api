@@ -8,8 +8,8 @@ from ..config.database import get_db
 
 
 router = APIRouter(
-    prefix="/listing",
-    tags=["listing"],
+    prefix="/listings",
+    tags=["listings"],
     responses={404: {"description": "Not found"}},
 )
 
