@@ -10,9 +10,9 @@ log = logging.getLogger("uvicorn")
 class Settings(BaseSettings):
     database_hostname: str
     database_port: str
-    database_password: str
     database_name: str
     database_username: str
+    database_password: str
     environment: str = "dev"
     testing: bool = bool(0)
 
