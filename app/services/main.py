@@ -11,3 +11,7 @@ class DBSessionContext(object):
 
 class AppService(DBSessionContext):
     pass
+
+
+class AppCRUD(DBSessionContext):
+    pass

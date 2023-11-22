@@ -1,10 +1,7 @@
 from fastapi import APIRouter, Depends, status
-from typing import Annotated, List, Any
-from sqlalchemy.orm import Session
+from typing import Annotated, List
 
 from ..schemas.listing import ListingPayload, ListingResponse
-from ..models.sqlalchemy import Listing
-from ..config.database import get_db
 from ..services.listing import ListingService
 
 router = APIRouter(
@@ -18,7 +15,7 @@ router = APIRouter(
 async def get_listings(
     listing_service: Annotated[ListingService, Depends(ListingService)]
 ):
-    return listing_service.get_listing()
+    return listing_service.get_listings()
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ListingResponse)
