@@ -1,29 +1,59 @@
-import os
-
+from fastapi.testclient import TestClient
 import pytest
-from starlette.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-from app import main
-from app.config.config import get_settings, Settings
+from app.main import app
+from app.config.config import settings
+from app.config.database import get_db
+from app.models.sqlalchemy import Base
+
+SQLALCHEMY_DATABASE_URL = (
+    f"postgresql://{settings.database_username}:{settings.database_password}"
+    f"@{settings.database_test_hostname}:{settings.database_port}/{settings.database_test_name}"
+)
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def get_settings_override():
-    return Settings(
-        testing=1,
-        database_hostname=os.environ.get("DATABASE_HOSTNAME"),
-        database_port=os.environ.get("DATABASE_PORT"),
-        database_name=os.environ.get("DATABASE_NAME"),
-        database_username=os.environ.get("DATABASE_USERNAME"),
-        database_password=os.environ.get("DATABASE_PASSWORD"),
-    )
+@pytest.fixture()
+def session():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
-@pytest.fixture(scope="module")
-def test_app():
-    # set up
-    main.app.dependency_overrides[get_settings] = get_settings_override
-    with TestClient(main.app) as test_client:
-        # testing
-        yield test_client
+@pytest.fixture()
+def client(session):
+    def override_get_db():
+        try:
+            yield session
+        finally:
+            session.close()
 
-    # tear down
+    app.dependency_overrides[get_db] = override_get_db
+    yield TestClient(app)
+
+
+listing_data = {
+    "latest_price": 400000,
+    "listing_url": "seloger.com/massivehouselille",
+    "location": "27 rue Solferino, Lille",
+    "rooms": 13,
+    "surface": 300,
+    "title": "Massive House Lille Vauban",
+    "type": "house",
+}
+
+
+@pytest.fixture()
+def test_listing(client):
+    response = client.post("/listings/", json=listing_data)
+
+    assert response.status_code == 201

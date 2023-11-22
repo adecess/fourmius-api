@@ -11,15 +11,11 @@ class ListingBase(BaseModel):
     listing_url: str
 
 
-class ListingCreate(ListingBase):
+class ListingPayload(ListingBase):
     pass
 
 
-class ListingItem(ListingBase):
+class ListingResponse(ListingBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-
-
-class ListingOut(ListingBase):
-    model_config = ConfigDict(from_attributes=True)

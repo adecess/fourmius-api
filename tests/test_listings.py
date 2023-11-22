@@ -1,24 +1,5 @@
-import pytest
-
-from app.schemas.listing import ListingItem
-from .database import client, session
-
-listing_data = {
-    "latest_price": 400000,
-    "listing_url": "seloger.com/massivehouselille",
-    "location": "27 rue Solferino, Lille",
-    "rooms": 13,
-    "surface": 300,
-    "title": "Massive House Lille Vauban",
-    "type": "house",
-}
-
-
-@pytest.fixture()
-def test_listing(client):
-    response = client.post("/listings/", json=listing_data)
-
-    assert response.status_code == 201
+from app.schemas.listing import ListingResponse
+from tests.conftest import listing_data
 
 
 def test_get_listings(client, test_listing):
@@ -26,7 +7,7 @@ def test_get_listings(client, test_listing):
 
     # Then
     assert response.status_code == 200
-    assert response.json() == [listing_data]
+    assert response.json() == [{**listing_data, "id": 1}]
 
 
 def test_create_listing(client):
@@ -43,7 +24,7 @@ def test_create_listing(client):
         },
     )
 
-    listing_response = ListingItem(**response.json())
+    listing_response = ListingResponse(**response.json())
 
     assert listing_response.id == 1
     assert listing_response.listing_url == "seloger.com/massiveflatlille"
@@ -52,3 +33,64 @@ def test_create_listing(client):
     assert listing_response.location == "28 rue Solferino, Lille"
 
     assert response.status_code == 201
+
+
+def test_create_listing_invalid_json(client):
+    response = client.post(
+        "/listings/",
+        json={},
+    )
+    assert response.status_code == 422
+    assert response.json() == {
+        "detail": [
+            {
+                "type": "missing",
+                "loc": ["body", "title"],
+                "msg": "Field required",
+                "input": {},
+                "url": "https://errors.pydantic.dev/2.4/v/missing",
+            },
+            {
+                "type": "missing",
+                "loc": ["body", "location"],
+                "msg": "Field required",
+                "input": {},
+                "url": "https://errors.pydantic.dev/2.4/v/missing",
+            },
+            {
+                "type": "missing",
+                "loc": ["body", "type"],
+                "msg": "Field required",
+                "input": {},
+                "url": "https://errors.pydantic.dev/2.4/v/missing",
+            },
+            {
+                "type": "missing",
+                "loc": ["body", "latest_price"],
+                "msg": "Field required",
+                "input": {},
+                "url": "https://errors.pydantic.dev/2.4/v/missing",
+            },
+            {
+                "type": "missing",
+                "loc": ["body", "surface"],
+                "msg": "Field required",
+                "input": {},
+                "url": "https://errors.pydantic.dev/2.4/v/missing",
+            },
+            {
+                "type": "missing",
+                "loc": ["body", "rooms"],
+                "msg": "Field required",
+                "input": {},
+                "url": "https://errors.pydantic.dev/2.4/v/missing",
+            },
+            {
+                "type": "missing",
+                "loc": ["body", "listing_url"],
+                "msg": "Field required",
+                "input": {},
+                "url": "https://errors.pydantic.dev/2.4/v/missing",
+            },
+        ]
+    }

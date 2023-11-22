@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, status
-from typing import List
+from typing import Annotated, List, Any
 from sqlalchemy.orm import Session
 
-from ..schemas.listing import ListingCreate, ListingItem, ListingOut
+from ..schemas.listing import ListingPayload, ListingResponse
 from ..models.sqlalchemy import Listing
 from ..config.database import get_db
-
+from ..services.listing import ListingService
 
 router = APIRouter(
     prefix="/listings",
@@ -14,17 +14,16 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=List[ListingOut])
-async def get_listings(db: Session = Depends(get_db)):
-    listings = db.query(Listing).all()
-    return listings
+@router.get("/", response_model=List[ListingResponse])
+async def get_listings(
+    listing_service: Annotated[ListingService, Depends(ListingService)]
+):
+    return listing_service.get_listing()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=ListingItem)
-def create_listing(listing: ListingCreate, db: Session = Depends(get_db)):
-    new_listing = Listing(**listing.model_dump())
-    db.add(new_listing)
-    db.commit()
-    db.refresh(new_listing)
-
-    return new_listing
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=ListingResponse)
+def create_listing(
+    listing: ListingPayload,
+    listing_service: Annotated[ListingService, Depends(ListingService)],
+):
+    return listing_service.create_listing(listing)
