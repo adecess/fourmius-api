@@ -9,7 +9,7 @@ class Base(DeclarativeBase):
 
 
 class Listing(Base):
-    __tablename__ = 'listings'
+    __tablename__ = "listings"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
@@ -19,14 +19,20 @@ class Listing(Base):
     surface: Mapped[int]
     rooms: Mapped[int]
     listing_url: Mapped[str] = mapped_column(unique=True)
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=text('now()'))
+    created_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP(timezone=True), server_default=text("now()")
+    )
 
 
 class PriceHistory(Base):
-    __tablename__ = 'price_history'
+    __tablename__ = "price_history"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    listing_id: Mapped[str] = mapped_column(ForeignKey("listings.id", ondelete="CASCADE"))
+    listing_id: Mapped[str] = mapped_column(
+        ForeignKey("listings.id", ondelete="CASCADE")
+    )
     price: Mapped[int]
-    price_date: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=text('now()'))
+    price_date: Mapped[datetime] = mapped_column(
+        TIMESTAMP(timezone=True), server_default=text("now()")
+    )
     listing: Mapped["Listing"] = relationship("Listing")

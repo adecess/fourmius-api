@@ -13,5 +13,5 @@ async def root(settings: Settings = Depends(get_settings)):
     return {
         "message": "Welcome to Fourmius.io!",
         "environment": settings.environment,
-        "testing": settings.testing
+        "testing": settings.testing,
     }

@@ -2,7 +2,6 @@ from pydantic import BaseModel, ConfigDict
 
 
 class ListingBase(BaseModel):
-
     title: str
     location: str
     type: str
