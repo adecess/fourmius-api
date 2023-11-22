@@ -1,8 +1,6 @@
 import logging
 from functools import lru_cache
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import AnyUrl
 
 log = logging.getLogger("uvicorn")
 
@@ -13,6 +11,9 @@ class Settings(BaseSettings):
     database_name: str
     database_username: str
     database_password: str
+    database_test_hostname: str
+    database_test_name: str
+    database_test_port: str
     environment: str = "dev"
     testing: bool = bool(0)
 
