@@ -1,8 +1,11 @@
 from fastapi import FastAPI, Depends
 
-from app.config.config import get_settings, Settings
+from .config.config import get_settings, Settings
+from .routers import listing
 
 app = FastAPI()
+
+app.include_router(listing.router)
 
 
 @app.get("/")
