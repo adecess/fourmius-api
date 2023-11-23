@@ -18,6 +18,13 @@ async def get_listings(
     return listing_service.get_listings()
 
 
+@router.get("/{_id}", response_model=ListingResponse)
+async def get_listing(
+    _id: int, listing_service: Annotated[ListingService, Depends(ListingService)]
+):
+    return listing_service.get_listing(_id)
+
+
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ListingResponse)
 def create_listing(
     listing: ListingPayload,
