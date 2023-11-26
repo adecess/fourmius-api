@@ -12,8 +12,8 @@ class ListingCRUD(AppCRUD):
     def get_listings(self) -> Sequence[Listing]:
         return self.db.execute(select(Listing)).scalars().all()
 
-    def get_listing(self, _id: int) -> Listing:
-        listing = self.db.scalars(select(Listing).filter_by(id=_id).limit(1)).first()
+    def get_listing(self, id_: int) -> Listing:
+        listing = self.db.scalars(select(Listing).filter_by(id=id_).limit(1)).first()
 
         if not listing:
             raise HTTPException(status_code=404, detail="Listing not found")
