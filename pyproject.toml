@@ -20,7 +20,7 @@ dependencies = [
     "httpcore==0.18.0",
     "httptools==0.6.1",
     "httpx==0.25.0",
-    "idna==3.4",
+    "idna==3.7",
     "iniconfig==2.0.0",
     "itsdangerous==2.1.2",
     "jinja2==3.1.4",
