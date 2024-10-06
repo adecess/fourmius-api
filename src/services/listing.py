@@ -2,10 +2,10 @@ from fastapi import HTTPException
 
 from typing import Sequence
 
-from app.services.main import AppService, AppCRUD
+from src.services.main import AppService, AppCRUD
 from sqlalchemy.sql.expression import select
-from app.models.sqlalchemy import Listing
-from app.schemas.listing import ListingPayload
+from src.models.sqlalchemy import Listing
+from src.schemas.listing import ListingPayload
 
 
 class ListingCRUD(AppCRUD):

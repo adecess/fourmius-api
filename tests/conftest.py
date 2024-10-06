@@ -3,14 +3,14 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.main import app
-from app.config.config import settings
-from app.config.database import get_db
-from app.models.sqlalchemy import Base
+from src.main import app
+from src.config.config import settings
+from src.config.database import get_db
+from src.models.sqlalchemy import Base
 
 SQLALCHEMY_DATABASE_URL = (
     f"postgresql://{settings.database_username}:{settings.database_password}"
-    f"@{settings.database_test_hostname}:{settings.database_port}/{settings.database_test_name}"
+    f"@{settings.database_test_hostname}:{settings.database_test_port}/{settings.database_test_name}"
 )
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)

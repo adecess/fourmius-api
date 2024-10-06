@@ -1,4 +1,4 @@
-from app.schemas.listing import ListingResponse
+from src.schemas.listing import ListingResponse
 from tests.conftest import listing_data
 
 

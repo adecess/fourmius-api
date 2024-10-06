@@ -1,17 +1,15 @@
-# pull official base image
-FROM python:3.11.6-slim-bullseye
+FROM python:3.12-slim
 
-# set working directory
-WORKDIR /usr/src/app
+# Install uv.
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# install python dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
-
-# add app
+# Copy the application into the container.
 COPY . .
+
+# Install the application dependencies.
+RUN uv sync --frozen --no-cache
+
+# Run the application.
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]

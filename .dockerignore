@@ -1,9 +1,10 @@
+.DS_Store
 __pycache__
-venv/
-.env
+*venv/
 .git
+Dockerfile.dev
 Dockerfile
 .dockerignore
 .pytest_cache
 Procfile
-.idea
+*.idea
