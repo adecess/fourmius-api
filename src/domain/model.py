@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import List
+from typing import List, Union
 from uuid import UUID
 from enum import Enum
 
@@ -11,7 +11,7 @@ class PropertyType(Enum):
 
 
 @dataclass(frozen=True)
-class PropertyCharacteristic:
+class PropertyCharacteristics:
     address: str
     postcode: str
     city: str
@@ -30,15 +30,20 @@ class Property:
     def __init__(
         self,
         id: UUID,
-        characteristic: PropertyCharacteristic,
+        characteristics: PropertyCharacteristics,
         prices: List[PropertyPrice],
         listing: str,
         version_number: int = 0,
     ):
         self.id = id
         self.version_number = version_number
-        self.characteristic = characteristic
+        self.characteristic = characteristics
         self.prices = prices
         self.latest_price = prices[0]
-        self.change_since_previous_price = None
+        self.change_since_previous_price: float | None = None
         self.listing = listing
+
+    def add_price_entry(self, new_price: PropertyPrice) -> None:
+        self.change_since_previous_price = new_price.price / self.latest_price.price
+        self.prices.append(new_price)
+        self.latest_price = new_price

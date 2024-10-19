@@ -15,3 +15,6 @@ ENV/
 
 # idea folder
 *.idea
+
+# VS Code
+*.vscode
