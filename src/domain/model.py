@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from datetime import date
 from typing import List
-from enum import Enum
 from uuid import UUID
+from enum import Enum
 
 
 class PropertyType(Enum):

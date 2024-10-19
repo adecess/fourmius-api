@@ -36,7 +36,7 @@ def test_get_listing(client, test_listing):
 
 
 def test_get_listing_invalid_id(client, test_listing):
-    new_listing_response = client.post(
+    client.post(
         "/listings/",
         json={
             "title": "Big Flat Gambetta Lille",

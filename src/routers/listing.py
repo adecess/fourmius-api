@@ -13,7 +13,7 @@ router = APIRouter(
 
 @router.get("/", response_model=List[ListingResponse])
 async def get_listings(
-    listing_service: Annotated[ListingService, Depends(ListingService)]
+    listing_service: Annotated[ListingService, Depends(ListingService)],
 ):
     return listing_service.get_listings()
 

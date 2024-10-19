@@ -1,10 +1,11 @@
 """create listings table
 
 Revision ID: 7af07e61080a
-Revises: 
+Revises:
 Create Date: 2023-10-28 19:40:49.479662
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op
