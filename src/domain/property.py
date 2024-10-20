@@ -54,3 +54,10 @@ class Property:
         )
         self.prices.append(new_price)
         self.latest_price = new_price
+
+    def is_price_decreasing(self) -> bool | None:
+        return (
+            self.change_since_previous_price < 1
+            if self.change_since_previous_price
+            else None
+        )
