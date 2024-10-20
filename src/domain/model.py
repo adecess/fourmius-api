@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import List, Union
+from typing import List
 from uuid import UUID
 from enum import Enum
 
@@ -43,7 +43,14 @@ class Property:
         self.change_since_previous_price: float | None = None
         self.listing = listing
 
+    def calculate_price_change(
+        self, new_price: PropertyPrice, old_price: PropertyPrice
+    ) -> float:
+        return new_price.price / old_price.price
+
     def add_price_entry(self, new_price: PropertyPrice) -> None:
-        self.change_since_previous_price = new_price.price / self.latest_price.price
+        self.change_since_previous_price = self.calculate_price_change(
+            new_price, self.latest_price
+        )
         self.prices.append(new_price)
         self.latest_price = new_price
